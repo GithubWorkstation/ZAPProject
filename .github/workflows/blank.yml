@@ -7,8 +7,9 @@ on:
   push:
     branches:
       - main  # Or trigger on push to the `main` branch
+
 permissions:
-  issues: write
+  contents: read  # Adjust permissions as needed
 
 jobs:
   zap_scan:
@@ -17,16 +18,17 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Set up Python (optional, if your application is Python-based)
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.8'
           
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.14.0
+        uses: zaproxy/action-baseline@v0.15.0
         with:
           target: 'https://www.medium.com/'
           token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true  # Enable debug mode for detailed logs
