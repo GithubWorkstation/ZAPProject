@@ -10,27 +10,26 @@ on:
   workflow_dispatch:  # Allow manual triggering of the workflow
 
 permissions:
-  contents: write  # Required for the ZAP scan to work correctly
+  issues: write
 
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Checkout the repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Python (if required for your application)
+      # Set up Python (optional, if your application is Python-based)
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-          
-      # Step 3: Run OWASP ZAP Scan
+
+      # Run ZAP Scan
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.15.0
+        uses: zaproxy/action-baseline@v0.14.0
         with:
-          target: 'https://www.medium.com/'  # Replace with your target URL
+          target: 'https://www.medium.com/'
           token: ${{ secrets.GITHUB_TOKEN }}
-          
