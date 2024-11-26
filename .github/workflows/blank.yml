@@ -6,28 +6,31 @@ on:
       - main  # Trigger ZAP scan on PRs targeting the `main` branch
   push:
     branches:
-      - main  # Or trigger on push to the `main` branch
+      - main  # Trigger on push to the `main` branch
+  workflow_dispatch:  # Allow manual triggering of the workflow
+
 permissions:
-  issues: write
+  contents: read  # Use the minimal required permissions
 
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Step 1: Checkout the repository
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Set up Python (optional, if your application is Python-based)
+      # Step 2: Set up Python (if required by your application)
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.8'
           
+      # Step 3: Run the ZAP Scan
       - name: ZAP Scan
-  uses: zaproxy/action-baseline@v0.15.0
-  with:
-    target: 'https://www.medium.com/'
-    token: ${{ secrets.GITHUB_TOKEN }}
-
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          target: 'https://www.medium.com/'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true  # Enable detailed logging
